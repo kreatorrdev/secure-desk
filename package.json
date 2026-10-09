@@ -40,7 +40,8 @@
     "test:security:controls": "node --test scripts/security-controls.test.mjs",
     "check:security:web": "node scripts/check-security-web.mjs",
     "check:gate6:local": "node scripts/check-gate6-local.mjs",
-    "test:attachments:transfer": "node --test scripts/attachment-transfer.test.mjs"
+    "test:attachments:transfer": "node --test scripts/attachment-transfer.test.mjs",
+    "test:maintenance": "node --test scripts/maintenance-observability.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",
