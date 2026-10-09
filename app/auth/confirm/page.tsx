@@ -1,8 +1,14 @@
+import { redirect } from "next/navigation";
 import { AuthShell } from "@/components/auth-shell";
 import { ConfirmForm, ResendForm } from "@/components/auth-forms";
 export const dynamic = "force-dynamic";
 export default async function ConfirmPage({ searchParams }: PageProps<"/auth/confirm">) {
   const params = await searchParams;
+  // The default provider template confirms upstream. Require password sign-in;
+  // a code in a URL alone never establishes a SecureDesk session.
+  if (params.token_hash === undefined && typeof params.code === "string" && /^[A-Za-z0-9_-]{20,256}$/.test(params.code)) {
+    redirect("/login");
+  }
   const tokenHash = typeof params.token_hash === "string" ? params.token_hash : "";
   const valid = params.type === "email" && /^[A-Za-z0-9_-]{20,256}$/.test(tokenHash);
   return <AuthShell title={valid ? "Confirm your email" : "Confirmation link unavailable"} description={valid ? "Choose the button below to confirm your email and continue to your request status." : "This link is incomplete or invalid. Request a new confirmation email."}>
