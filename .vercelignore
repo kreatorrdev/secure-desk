@@ -1,0 +1,8 @@
+.tools/
+.npm-cache/
+node_modules/
+.next/
+.git/
+.vscode/
+.env*
+*.tsbuildinfo

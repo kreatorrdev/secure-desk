@@ -1,0 +1,1 @@
+export default function LoadingTickets() { return <section role="status" aria-busy="true" className="org-panel"><h1 className="text-xl font-semibold">Loading workspace…</h1><p className="mt-3 text-[var(--org-muted)]">Checking your current access and loading records.</p></section>; }

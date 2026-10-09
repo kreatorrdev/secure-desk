@@ -1,0 +1,1 @@
+export default function AuditLoading() { return <div role="status"><h1 className="text-2xl font-semibold">Loading audit history…</h1><p className="mt-3 text-[var(--org-muted)]">Checking your administrator scope.</p></div>; }

@@ -1,0 +1,12 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "terminal.integrated.env.windows": {
+    "PATH": "${workspaceFolder}\\.tools\\node24;E:\\Docker\\Desktop\\resources\\bin;${env:PATH}",
+    "NEXT_TELEMETRY_DISABLED": "1",
+    "npm_config_cache": "${workspaceFolder}\\.npm-cache",
+    "SUPABASE_TELEMETRY_DISABLED": "1",
+    "SUPABASE_HOME": "${workspaceFolder}\\.tools\\supabase-home"
+  },
+  "git.path": "C:\\Users\\rcf11\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\git\\cmd\\git.exe"
+}

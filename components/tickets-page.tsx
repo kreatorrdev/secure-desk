@@ -1,0 +1,21 @@
+import Link from 'next/link';
+import { ticketAccess } from '@/lib/tickets/server';
+import { organizationIdPattern } from '@/lib/organizations/access';
+import { TicketCards, TicketFailure } from '@/components/ticket-state';
+import { pageNumber, ticketStatuses, type TicketSummary, type TicketContext } from '@/lib/tickets/types';
+export async function TicketsPageContent({ organization, params }: { organization?: string; params: Record<string, string | string[] | undefined> }) {
+ const access = await ticketAccess(); if (access.kind !== 'allowed') return <TicketFailure/>;
+ if (organization && !organizationIdPattern.test(organization)) return <TicketFailure missing/>;
+ const page = pageNumber(params.page), status = typeof params.status === 'string' && (params.status === 'all' || ticketStatuses.includes(params.status as typeof ticketStatuses[number])) ? params.status : 'all';
+ const queue = typeof params.queue === 'string' && ['sharing', 'unassigned', 'reopen'].includes(params.queue) && ['staff', 'admin', 'super_admin'].includes(access.role) ? params.queue : 'all';
+ const [result, contextResult] = await Promise.all([access.supabase.rpc('ticket_list', { p_organization_id: organization ?? null, p_status: status, p_offset: (page - 1) * 25, p_queue: queue }), organization ? access.supabase.rpc('ticket_context', { p_organization_id: organization }) : Promise.resolve({ data: null, error: null })]);
+ if (result.error || contextResult.error) return <TicketFailure/>;
+ const context = (contextResult.data as TicketContext[] | null)?.[0], rows = (result.data ?? []) as TicketSummary[], base = organization ? '/organizations/' + organization + '/tickets' : '/tickets';
+ const href = (n: number) => base + '?status=' + encodeURIComponent(status) + '&queue=' + queue + '&page=' + n;
+ return <section data-ticket-list><p className="org-eyebrow">{context?.organization_name ?? 'Your workspace'}</p><div className="mt-3 flex flex-wrap items-center justify-between gap-4"><h1 className="text-3xl font-semibold">{access.role === 'client' ? 'My & shared tickets' : access.role === 'staff' ? 'Assigned tickets' : 'Company tickets'}</h1>{context?.can_create ? <Link href={base + '/new'} className="org-button">Open ticket</Link> : !organization && <Link href="/organizations" className="org-button">Choose company to open ticket</Link>}</div>
+ <p className="mt-4 text-[var(--org-muted)]">{access.role === 'client' ? 'Your own tickets and tickets explicitly shared with you.' : access.role === 'staff' ? 'Tickets where you are the owner or an assigned collaborator.' : 'Tickets within your administrative scope.'}</p>
+ {params.notice === 'created' && <p className="org-notice mt-5" role="status">Ticket created for the selected Client. Owner assignment is handled by the company administrator.</p>}
+ <form method="get" className="my-7 flex flex-wrap items-end gap-4"><label className="org-field">Status<select className="org-input" name="status" defaultValue={status}><option value="all">All statuses</option>{ticketStatuses.map(s => <option key={s}>{s}</option>)}</select></label>{['staff', 'admin', 'super_admin'].includes(access.role) && <label className="org-field">Work queue<select className="org-input" name="queue" defaultValue={queue}><option value="all">All accessible tickets</option><option value="sharing">Pending sharing requests</option><option value="reopen">Pending continuation requests</option>{access.role !== 'staff' && <option value="unassigned">Awaiting owner</option>}</select></label>}<button className="org-button">Apply filters</button></form>
+ {rows.length ? <TicketCards tickets={rows.slice(0, 25)}/> : <div className="org-panel"><h2 className="text-lg font-semibold">No matching tickets</h2><p className="mt-2 text-[var(--org-muted)]">{page > 1 ? 'Try the first page or change your filters.' : 'Tickets you can access will appear here.'}</p><Link className="org-link mt-4 inline-block" href={base}>Go to first page</Link></div>}
+ <nav aria-label="Ticket pages" className="mt-6 flex flex-wrap gap-6"><span className="text-sm text-[var(--org-muted)]">Page {page}</span>{page > 1 && <Link className="org-link" href={href(page - 1)}>Previous page</Link>}{rows.length > 25 && page < 10000 && <Link className="org-link" href={href(page + 1)}>Next page</Link>}</nav></section>;
+}

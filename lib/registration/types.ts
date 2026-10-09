@@ -1,0 +1,4 @@
+export type ReviewState = { errors?: Record<string, string>; values?: Record<string, string>; message?: string };
+export type ReviewOrganization = { id: string; name: string; description: string; address: string; email: string; phone: string; status: 'pending' | 'active'; industry: string | null; contact_person: string | null };
+export type ReviewRequest = { id: string; attempt_number: number; full_name: string; email: string; email_confirmed: boolean; company_name_text: string; message: string; phone: string; target_organization_id: string | null; organization_name: string | null; organization_status: string | null; organization_details: ReviewOrganization | null; status: 'pending' | 'approved' | 'rejected'; rejection_reason: string | null; reviewed_at: string | null; created_at: string; can_review: boolean; can_approve: boolean };
+
