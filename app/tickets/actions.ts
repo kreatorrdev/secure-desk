@@ -58,7 +58,7 @@ export async function ticketAction(_state: TicketFormState, form: FormData): Pro
       result = await access.supabase.rpc('manage_ticket', { ...common, p_expected_revision: revision, p_intent: intent, p_value: value });
     } else return { message: 'This form is invalid. Reload the page.' };
   }
-  if (result.error) return { message: result.error.code === '40001' ? 'This record or your permissions changed. Reload before trying again.' : result.error.code === '22023' ? (intent === 'edit_comment' ? 'The comment cannot be edited. The 15-minute window may have ended.' : 'This change is not allowed. Check the current status and required fields.') : 'Your ticket access is unavailable. Refresh the page.', values };
+  if (result.error) return { message: (result.error.code === 'PT409' || result.error.code === '40001') ? 'This record or your permissions changed. Reload before trying again.' : result.error.code === '22023' ? (intent === 'edit_comment' ? 'The comment cannot be edited. The 15-minute window may have ended.' : 'This change is not allowed. Check the current status and required fields.') : 'Your ticket access is unavailable. Refresh the page.', values };
   revalidatePath('/dashboard'); revalidatePath('/tickets'); revalidatePath('/organizations/' + org + '/tickets', 'layout');
   // Creating on behalf does not imply permission to read the new ticket.
   if (intent === 'create' && access.role === 'staff') redirect('/tickets?notice=created');

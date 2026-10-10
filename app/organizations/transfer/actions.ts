@@ -28,7 +28,7 @@ export async function reviewTransfer(_state: TransferState, form: FormData): Pro
   if (intent === 'approve' && (field(form, 'verified') !== 'yes' || !['source', 'destination', 'super_admin'].includes(side))) return { message: 'Confirm that you reviewed the applicant, companies and effect of this transfer.' };
   if (intent === 'reject' && (!reason || [...reason].length > 2000)) return { message: 'Enter a rejection reason of 1 to 2000 characters.' };
   const result = await access.supabase.rpc('review_organization_transfer', { p_request_id: id, p_expected_revision: revision, p_intent: intent, p_side: side || null, p_reason: reason || null });
-  if (result.error) return { message: result.error.code === '40001' ? 'This transfer has changed. Refresh the list before reviewing again.' : result.error.code === '22023' ? 'Transfer requirements are no longer met. Check the current account, membership and company status.' : 'This transfer is unavailable or your review access has changed. Refresh the list.' };
+  if (result.error) return { message: (result.error.code === 'PT409' || result.error.code === '40001') ? 'This transfer has changed. Refresh the list before reviewing again.' : result.error.code === '22023' ? 'Transfer requirements are no longer met. Check the current account, membership and company status.' : 'This transfer is unavailable or your review access has changed. Refresh the list.' };
   revalidatePath('/organizations', 'layout');
   revalidatePath('/account');
   const notice = result.data === 'awaiting_other_company' ? 'consent' : result.data === 'approved' ? 'approved' : 'rejected';

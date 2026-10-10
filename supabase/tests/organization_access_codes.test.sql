@@ -73,7 +73,7 @@ select extensions.throws_ok('select code_hash from public.organization_access_co
 select extensions.throws_ok('update public.organization_access_codes set active=false','42501',null,'Direct code writes denied');
 select extensions.throws_ok('select * from public.organization_code_submissions','42501',null,'Private submission receipts not exposed');
 select extensions.throws_ok('select * from securedesk_private.organization_code_attempts','42501',null,'Rate counters not exposed');
-select extensions.throws_ok('select * from public.manage_organization_access_code(''f4200000-0000-4000-8000-000000000001'',null,''issue'')','40001',null,'Stale issuance cannot rotate another code');
+select extensions.throws_ok('select * from public.manage_organization_access_code(''f4200000-0000-4000-8000-000000000001'',null,''issue'')','PT409',null,'Stale issuance cannot rotate another code');
 select extensions.throws_ok('select * from public.manage_organization_access_code(''f4200000-0000-4000-8000-000000000001'',(select id from issued where label=''a''),''unknown'')','22023',null,'Invalid lifecycle action rejected');
 reset role;
 select extensions.ok((select c.code_hash<>i.code and c.code_hash=encode(extensions.digest(i.code,'sha256'),'hex') from public.organization_access_codes c join issued i on i.id=c.id where i.label='a'),'Database stores hash only');
@@ -124,7 +124,7 @@ set local role authenticated;
 set local request.jwt.claims='{"sub":"f4100000-0000-4000-8000-000000000002","role":"authenticated","is_anonymous":false,"app_role":"super_admin"}';
 insert into issued select 'rotated',* from public.manage_organization_access_code('f4200000-0000-4000-8000-000000000001',(select id from issued where label='a'),'issue');
 select extensions.ok((select a.code<>b.code from issued a,issued b where a.label='a' and b.label='rotated'),'Rotation generates independent code');
-select extensions.throws_ok('select * from public.manage_organization_access_code(''f4200000-0000-4000-8000-000000000001'',(select id from issued where label=''a''),''revoke'')','40001',null,'Stale revoke cannot affect replacement');
+select extensions.throws_ok('select * from public.manage_organization_access_code(''f4200000-0000-4000-8000-000000000001'',(select id from issued where label=''a''),''revoke'')','PT409',null,'Stale revoke cannot affect replacement');
 reset role;
 set local role authenticated;
 set local request.jwt.claims='{"sub":"f4100000-0000-4000-8000-000000000009","role":"authenticated","is_anonymous":false,"app_role":"super_admin"}';

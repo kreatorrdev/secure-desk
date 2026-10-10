@@ -206,7 +206,7 @@ async function run() {
   assert((await post(rejected,raceEntry,{organization_code:issueB.code})).location===ownPath+'?notice=submitted','Rejected Client may submit a new attempt.');
   const raceReq=requestOf(rejected);
   const race=await Promise.all([[oaA,'source'],[oaB,'destination']].map(([actor,side])=>actor.client.rpc('review_organization_transfer',reviewArgs(raceReq,side))));
-  assert(race.filter(r=>r.data==='awaiting_other_company').length===1&&race.filter(r=>r.error?.code==='40001').length===1,'Concurrent first consents have one accepted revision and one stale response.');
+  assert(race.filter(r=>r.data==='awaiting_other_company').length===1&&race.filter(r=>r.error?.code==='PT409').length===1,'Concurrent first consents have one accepted revision and one stale response.');
   assert(requestOf(rejected).status==='pending'&&membership(rejected).length===1,'Concurrent stale review leaves one old active membership.');
   const sourceWon=race[0].data==='awaiting_other_company',winningActor=sourceWon?oaA:oaB,winningOrg=sourceWon?orgA:orgB,otherActor=sourceWon?oaB:oaA,otherSide=sourceWon?'destination':'source';
   const savedWinnerForm=await consentForm(winningActor,raceReq.id,sourceWon?'source':'destination');

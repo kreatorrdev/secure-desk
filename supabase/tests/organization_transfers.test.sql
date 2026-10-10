@@ -138,7 +138,7 @@ select extensions.ok((select source_approved and not destination_approved from p
 reset role;
 set local role authenticated;
 set local request.jwt.claims='{"sub":"f5100000-0000-4000-8000-000000000003","role":"authenticated","is_anonymous":false,"app_role":"super_admin"}';
-select extensions.throws_ok('select public.review_organization_transfer((select id from request_ids where label=''6''),1,''approve'',''destination'')','40001',null,'Old review revision cannot silently complete');
+select extensions.throws_ok('select public.review_organization_transfer((select id from request_ids where label=''6''),1,''approve'',''destination'')','PT409',null,'Old review revision cannot silently complete');
 select extensions.is(public.review_organization_transfer((select id from request_ids where label='6'),(select revision::bigint from public.organization_transfer_requests('all') where id=(select id from request_ids where label='6')),'approve','destination'),'approved','Second company consent completes transfer');
 reset role;
 set local role authenticated;
@@ -154,7 +154,7 @@ select extensions.throws_ok('update public.organization_change_requests set stat
 reset role;
 set local role authenticated;
 set local request.jwt.claims='{"sub":"f5100000-0000-4000-8000-000000000003","role":"authenticated","is_anonymous":false,"app_role":"super_admin"}';
-select extensions.throws_ok('select public.review_organization_transfer((select id from request_ids where label=''6''),1,''approve'',''destination'')','40001',null,'Repeated completion cannot add membership');
+select extensions.throws_ok('select public.review_organization_transfer((select id from request_ids where label=''6''),1,''approve'',''destination'')','PT409',null,'Repeated completion cannot add membership');
 reset role;
 set local role authenticated;
 set local request.jwt.claims='{"sub":"f5100000-0000-4000-8000-000000000007","role":"authenticated","is_anonymous":false,"app_role":"super_admin"}';

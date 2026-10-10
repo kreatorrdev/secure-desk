@@ -165,7 +165,7 @@ async function run() {
   assert((await post(writer,writerEdit,{name:'Fictional network review updated',description:'Updated by assigned Staff.'})).location===path(orgA)+'/'+id+'?notice=updated','Explicitly permitted Staff edits active project through native form.');
   assert((await post(oa,oaEdit,{name:'Stale edit',description:'Old form.'})).html.includes('project or your permissions have changed'),'Old project revision cannot overwrite Staff edit.');
   const current=project(id),racing=await Promise.all([oa,writer].map(async(actor,n)=>actor.client.rpc('update_organization_project',{...await newArgs(actor,orgA,id,{name:'Fictional concurrent review '+n,description:'Only one revision wins.'}),p_expected_revision:String(current.revision)})));
-  assert(racing.filter(r=>!r.error).length===1&&racing.filter(r=>r.error?.code==='40001').length===1,'Concurrent edits accept one revision and reject one stale update.');
+  assert(racing.filter(r=>!r.error).length===1&&racing.filter(r=>r.error?.code==='PT409').length===1,'Concurrent edits accept one revision and reject one stale update.');
   assert(project(id).revision===current.revision+1,'Concurrent edits advance revision only once.');
   const supportForm=form(await page(oa,path(orgA)+'/'+supportA),'data-project-form="update"');
   assert(supportForm.markup.includes('readOnly')||supportForm.markup.includes('readonly'),'General Support name input is fixed.');

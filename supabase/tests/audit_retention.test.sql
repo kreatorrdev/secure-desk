@@ -125,11 +125,11 @@ select extensions.is(jsonb_array_length(public.audit_list(p_organization_id=>'f9
 select extensions.is(jsonb_array_length(public.ticket_activity('f9200000-0000-4000-8000-000000000001','f9400000-0000-4000-8000-000000000001')),26,'Activity bounded');
 select extensions.throws_ok($t$select public.set_audit_retention(0,1,(select access_revision from public.profiles where id=auth.uid()))$t$,'22023',null,'Retention lower bound');
 select extensions.throws_ok($t$select public.set_audit_retention(3651,1,(select access_revision from public.profiles where id=auth.uid()))$t$,'22023',null,'Retention upper bound');
-select extensions.throws_ok($t$select public.set_audit_retention(366,1,999)$t$,'40001',null,'Stale actor revision');
+select extensions.throws_ok($t$select public.set_audit_retention(366,1,999)$t$,'PT409',null,'Stale actor revision');
 select extensions.is(public.set_audit_retention(366,1,(select access_revision from public.profiles where id=auth.uid()))->>'changed','true','SA changes policy');
 select extensions.is((select revision::integer from public.platform_settings),2,'Policy revision advances');
 select extensions.ok((select actor_user_id=auth.uid() and metadata_redacted->>'previous_days'='365' and metadata_redacted->>'retention_days'='366' from public.audit_logs where event_type='audit.retention_changed' order by created_at desc limit 1),'Policy change audit actual actor');
-select extensions.throws_ok($t$select public.set_audit_retention(367,1,(select access_revision from public.profiles where id=auth.uid()))$t$,'40001',null,'Stale policy revision');
+select extensions.throws_ok($t$select public.set_audit_retention(367,1,(select access_revision from public.profiles where id=auth.uid()))$t$,'PT409',null,'Stale policy revision');
 select extensions.is(public.set_audit_retention(366,2,(select access_revision from public.profiles where id=auth.uid()))->>'changed','false','Same value no duplicate');
 select extensions.is((select count(*)::integer from public.audit_logs where event_type='audit.retention_changed' and actor_user_id='f9100000-0000-4000-8000-000000000001'),1,'One policy audit');
 select public.set_audit_retention(365,2,(select access_revision from public.profiles where id=auth.uid()));

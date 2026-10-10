@@ -141,7 +141,7 @@ async function run() {
  const concurrentArgs=async(actor,intent)=>{const c=(await context(actor,orgA)).data[0];return{p_organization_id:orgA,p_proposal_id:id,p_expected_revision:String(row(id).revision),p_expected_access_revision:c.access_revision,p_expected_assignment_revision:c.assignment_revision,p_intent:intent,p_text:'Concurrent fixture decision.'};};
  const args=await concurrentArgs(oa,'approve');
  const racing=await Promise.all([oa.client.rpc('review_project_proposal',args),oa.client.rpc('review_project_proposal',{...args,p_intent:'reject'})]);
- assert(racing.filter(r=>!r.error).length===1&&racing.filter(r=>r.error?.code==='40001').length===1,'Concurrent approve/reject accepts exactly one final decision.');
+ assert(racing.filter(r=>!r.error).length===1&&racing.filter(r=>r.error?.code==='PT409').length===1,'Concurrent approve/reject accepts exactly one final decision.');
  const first=row(id);assert(['approved','rejected'].includes(first.status),'Concurrent decision is final.');
  assert(sql('select count(*)::integer from public.audit_logs where target_id='+q(id)+" and event_type in ('proposal.approve','proposal.reject')")===1,'Concurrent final decision has one audit.');
  assert(!(await post(oa,decision,{text:'Duplicate click'})).location,'Old native decision cannot run twice.');

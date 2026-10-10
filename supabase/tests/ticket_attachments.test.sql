@@ -255,8 +255,8 @@ select extensions.throws_ok('select * from pg_temp.reserve_fixture(''f8400000-00
 select extensions.throws_ok('select * from pg_temp.reserve_fixture(''f8400000-0000-4000-8000-000000000004'',''bad.exe'',''application/x-msdownload'',4)','22023',null,'Invalid attachment metadata is rejected');
 select extensions.throws_ok('select * from pg_temp.reserve_fixture(''f8400000-0000-4000-8000-000000000004'',''note.txt'',''text/plain'',0)','22023',null,'Invalid attachment metadata is rejected');
 select extensions.throws_ok('select * from pg_temp.reserve_fixture(''f8400000-0000-4000-8000-000000000004'',''note.txt'',''text/plain'',10485761)','22023',null,'Invalid attachment metadata is rejected');
-select extensions.throws_ok('select * from public.reserve_ticket_attachment(''f8200000-0000-4000-8000-000000000001'',''f8400000-0000-4000-8000-000000000004'',0,(select access_revision::bigint from public.ticket_context(''f8200000-0000-4000-8000-000000000001'')),(select scope_revision from public.ticket_context(''f8200000-0000-4000-8000-000000000001'')),''note.txt'',''text/plain'',4)','40001',null,'Stale ticket form cannot reserve');
-select extensions.throws_ok('select * from public.reserve_ticket_attachment(''f8200000-0000-4000-8000-000000000001'',''f8400000-0000-4000-8000-000000000004'',1,0,(select scope_revision from public.ticket_context(''f8200000-0000-4000-8000-000000000001'')),''note.txt'',''text/plain'',4)','40001',null,'Forged actor revision cannot reserve');
+select extensions.throws_ok('select * from public.reserve_ticket_attachment(''f8200000-0000-4000-8000-000000000001'',''f8400000-0000-4000-8000-000000000004'',0,(select access_revision::bigint from public.ticket_context(''f8200000-0000-4000-8000-000000000001'')),(select scope_revision from public.ticket_context(''f8200000-0000-4000-8000-000000000001'')),''note.txt'',''text/plain'',4)','PT409',null,'Stale ticket form cannot reserve');
+select extensions.throws_ok('select * from public.reserve_ticket_attachment(''f8200000-0000-4000-8000-000000000001'',''f8400000-0000-4000-8000-000000000004'',1,0,(select scope_revision from public.ticket_context(''f8200000-0000-4000-8000-000000000001'')),''note.txt'',''text/plain'',4)','PT409',null,'Forged actor revision cannot reserve');
 reset role;set local role service_role;set local request.jwt.claims='{"role":"service_role"}';
 select extensions.ok(public.abort_ticket_attachment((select id from reserved where label='a-work'),(select actor from reserved where label='a-work')) is null,'Compensation never claims a ready file');
 select extensions.ok(public.complete_ticket_attachment((select id from reserved where label='a-work'),(select actor from reserved where label='a-work'),'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')=(select id from reserved where label='a-work'),'Lost-response completion replay is idempotent');
@@ -409,7 +409,7 @@ insert into reserved select 'ticket-stale',r.id,r.storage_path,'f8100000-0000-40
 reset role;
 update public.tickets set priority='High' where id='f8400000-0000-4000-8000-000000000004';
 reset role;set local role service_role;set local request.jwt.claims='{"role":"service_role"}';
-select extensions.throws_ok('select public.complete_ticket_attachment((select id from reserved where label=''ticket-stale''),(select actor from reserved where label=''ticket-stale''),''aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'')','40001',null,'Completion rejects ticket-stale');
+select extensions.throws_ok('select public.complete_ticket_attachment((select id from reserved where label=''ticket-stale''),(select actor from reserved where label=''ticket-stale''),''aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'')','PT409',null,'Completion rejects ticket-stale');
 reset role;
 select extensions.is((select count(*) from public.attachments where id=(select id from reserved where label='ticket-stale') and state='ready')::integer,0,'Rejected upload stays hidden ticket-stale');
 reset role;set local role service_role;set local request.jwt.claims='{"role":"service_role"}';
@@ -419,7 +419,7 @@ insert into reserved select 'expired',r.id,r.storage_path,'f8100000-0000-4000-80
 reset role;
 update public.attachments set expires_at=clock_timestamp() where id=(select id from reserved where label='expired');
 reset role;set local role service_role;set local request.jwt.claims='{"role":"service_role"}';
-select extensions.throws_ok('select public.complete_ticket_attachment((select id from reserved where label=''expired''),(select actor from reserved where label=''expired''),''aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'')','40001',null,'Completion rejects expired');
+select extensions.throws_ok('select public.complete_ticket_attachment((select id from reserved where label=''expired''),(select actor from reserved where label=''expired''),''aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'')','PT409',null,'Completion rejects expired');
 reset role;
 select extensions.is((select count(*) from public.attachments where id=(select id from reserved where label='expired') and state='ready')::integer,0,'Rejected upload stays hidden expired');
 reset role;set local role service_role;set local request.jwt.claims='{"role":"service_role"}';

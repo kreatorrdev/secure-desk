@@ -13,6 +13,6 @@ export async function saveAuditRetention(_state: RetentionState, form: FormData)
  if (!/^[1-9][0-9]{0,3}$/.test(days) || Number(days) > 3650) return { days, error: 'Enter a whole number from 1 to 3650.' };
  if (!/^[1-9][0-9]{0,17}$/.test(revision) || !/^[1-9][0-9]{0,17}$/.test(actorRevision) || text('verified') !== 'yes') return { days, message: 'Confirm the effect and reload if the policy has changed.' };
  const result = await access.supabase.rpc('set_audit_retention', { p_days: Number(days), p_expected_revision: revision, p_expected_access_revision: actorRevision });
- if (result.error || result.data?.saved !== true) return { days, message: result.error?.code === '40001' ? 'The policy or your permissions changed. Reload before trying again.' : 'We could not confirm this change. Reload and check the current policy.' };
+ if (result.error || result.data?.saved !== true) return { days, message: (result.error?.code === 'PT409' || result.error?.code === '40001') ? 'The policy or your permissions changed. Reload before trying again.' : 'We could not confirm this change. Reload and check the current policy.' };
  revalidatePath('/admin/audit');redirect('/admin/audit?notice=saved');
 }

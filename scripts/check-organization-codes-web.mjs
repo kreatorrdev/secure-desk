@@ -180,7 +180,7 @@ async function run() {
   stage='concurrent rotation, rejection and rate limiting';
   const first=(await allowedRpc(oa.client,'manage_organization_access_code',{p_organization_id:orgA,p_expected_code_id:null,p_intent:'issue'},'Create code for race.'))[0];
   const racing=await Promise.all([1,2].map(()=>oa.client.rpc('manage_organization_access_code',{p_organization_id:orgA,p_expected_code_id:first.id,p_intent:'issue'})));
-  assert(racing.filter(r=>!r.error).length===1&&racing.filter(r=>r.error?.code==='40001').length===1,'Concurrent replacements have one winner and one stale rejection.');
+  assert(racing.filter(r=>!r.error).length===1&&racing.filter(r=>r.error?.code==='PT409').length===1,'Concurrent replacements have one winner and one stale rejection.');
   const fresh=racing.find(r=>!r.error).data[0];
   assert((await second.client.rpc('submit_organization_access_code',{p_code:first.code})).data==='unavailable','Losing old code cannot route request.');
   assert((await post(second,secondEntry,{organization_code:fresh.code})).location==='/account?notice=code-submitted','New code routes second applicant.');

@@ -20,7 +20,7 @@ export async function saveProject(_state: ProjectFormState, form: FormData): Pro
   const result = intent === 'create'
     ? await access.supabase.rpc('create_organization_project', args)
     : await access.supabase.rpc('update_organization_project', { ...args, p_expected_revision: revision });
-  if (result.error) return { message: result.error.code === '40001' ? 'This project or your permissions have changed. Reload before saving again.' : result.error.code === '22023' ? 'These details cannot be saved. General Support has a fixed name, and the company and project must be active.' : 'Your project-writing access is unavailable. Refresh the page.', values };
+  if (result.error) return { message: (result.error.code === 'PT409' || result.error.code === '40001') ? 'This project or your permissions have changed. Reload before saving again.' : result.error.code === '22023' ? 'These details cannot be saved. General Support has a fixed name, and the company and project must be active.' : 'Your project-writing access is unavailable. Refresh the page.', values };
   const path = '/organizations/' + organization + '/projects';
   revalidatePath(path, 'layout');
   redirect(path + '/' + id + '?notice=' + (intent === 'create' ? 'created' : 'updated'));

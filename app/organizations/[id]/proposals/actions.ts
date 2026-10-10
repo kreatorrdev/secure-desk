@@ -22,7 +22,7 @@ export async function saveProposal(_state: ProposalState, form: FormData): Promi
   if (text.length > 4000 || (['recommend', 'reject'].includes(intent) && !text)) return { message: 'Enter a recommendation or rejection reason of 1 to 4000 characters.' };
   result = await access.supabase.rpc('review_project_proposal', { ...base, p_expected_revision: revision, p_intent: intent, p_reviewer_id: intent === 'assign' ? reviewer || null : null, p_text: intent === 'assign' ? null : text || null });
  }
- if (result.error) return { message: result.error.code === '40001' ? 'This proposal or your permissions have changed, or an upload is in progress. Reload before trying again.' : result.error.code === '22023' ? 'These details cannot be saved. Check the fields, reviewer and company status. Final decisions cannot change.' : 'Your proposal access is unavailable. Refresh the page.', ...(intent === 'submit' ? { values: Object.fromEntries(Object.entries(values).map(([k,v]) => [k,v.slice(0,4000)])) } : {}) };
+ if (result.error) return { message: (result.error.code === 'PT409' || result.error.code === '40001') ? 'This proposal or your permissions have changed, or an upload is in progress. Reload before trying again.' : result.error.code === '22023' ? 'These details cannot be saved. Check the fields, reviewer and company status. Final decisions cannot change.' : 'Your proposal access is unavailable. Refresh the page.', ...(intent === 'submit' ? { values: Object.fromEntries(Object.entries(values).map(([k,v]) => [k,v.slice(0,4000)])) } : {}) };
  const path = '/organizations/' + org;
  revalidatePath(path + '/proposals', 'layout'); revalidatePath(path + '/projects', 'layout');
  redirect(path + '/proposals/' + id + '?notice=' + intent);

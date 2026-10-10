@@ -13,7 +13,7 @@ export async function manageOrganizationCode(_state: CodeActionState, form: Form
   if (!organizationIdPattern.test(organizationId) || (expectedId !== 'none' && !organizationIdPattern.test(expectedId)) || !['issue', 'revoke'].includes(intent)) return { message: 'This form is invalid. Refresh the page and try again.' };
   if (field(form, 'confirmed') !== 'yes') return { message: 'Confirm that you understand the effect of this change.' };
   const result = await access.supabase.rpc('manage_organization_access_code', { p_organization_id: organizationId, p_expected_code_id: expectedId === 'none' ? null : expectedId, p_intent: intent });
-  if (result.error) return { message: result.error.code === '40001' ? 'The code has changed. Refresh this page before trying again.' : 'The code could not be changed. Check your access and refresh the page.' };
+  if (result.error) return { message: (result.error.code === 'PT409' || result.error.code === '40001') ? 'The code has changed. Refresh this page before trying again.' : 'The code could not be changed. Check your access and refresh the page.' };
   revalidatePath('/organizations/' + organizationId + '/codes');
   const issued = result.data?.[0] as { id: string; code: string; expires_at: string } | undefined;
   return issued ? { message: 'New code issued. Save it now; it will not be shown again after leaving or refreshing this page.', changed: true, ...issued }
