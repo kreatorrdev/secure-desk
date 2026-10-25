@@ -45,6 +45,3 @@ next-env.d.ts
 # Local runtime and npm cache
 /.tools/
 /.npm-cache/
-
-# Markdown documentation stays local at the user\x27s request.
-*.[mM][dD]

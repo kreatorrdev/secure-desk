@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "SecureDesk",
-  description: "SecureDesk local development project",
+  description: "Company support, project requests and private files, connected.",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
