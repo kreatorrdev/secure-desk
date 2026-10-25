@@ -1,0 +1,36 @@
+# SecureDesk — audit completed and next guided role package
+
+13 October 2026. **J05 controlled hosted audit outcome confirmed; full Phase 7 remains open.** No new real Auth/browser roles have been activated yet.
+
+## Actually completed audit
+
+User enters YES in their terminal at 16:23:17 UTC. Actual result has **28 PASS / 0 FAIL**, COMMIT=true and independent read-only postcheck at 16:23:21 UTC. Only removed row is NEW expired fictional b87b4b7c-6e9c-4ecd-8038-7856929cae81. Original 16 audit rows have same digests; all 28 other complete tables, catalogue/110 functions/ACL/18 policies, owner and eight original file/object metadata sets remain same. Fresh control e8d46308-f0a3-4aa9-b6fd-3e09cadceb67 and NULL-actor system purge 50a06d05-dff1-4d20-a4f5-802d9a5d8f82 remain, so 29 tables / **92 rows**. Repeat worker returns zero; retention 365/revision 1 unchanged. Seven fictional users remain banned/retired, sessions/refresh=0. Owned audit/backup containers independently absent.
+
+Actual source: renewed-guided-audit-retention-2026-10-13T16-23-03-575Z.json; review: guided-audit-completion-review-2026-10-13.json. Earlier confirmation timeout FAIL is preserved, not declared PASS. This audit action is not repeated. Evidence of positive SCHEDULED audit purge and genuine Vercel daily caller are not derived from manual worker.
+
+## Recovery of current state
+
+**4 guard + 36 actual isolated PASS**: previous actual full 90-row archive at 13:04 UTC plus exactly TWO retained audit rows restore all current-92 digests, functions/ACL/policies/retirement and original eight byte copies (10.488.380 bytes). Network=none, scheduler off, duplicate delta replay rejected; owned container removed and absence confirmed. This is not new pg_dump or full managed Auth/API/Storage service. New reviewed-current-audit-retired-baseline-2026-10-13.json uses actual server postcheck time, not locally invented refresh.
+
+## Independently prepared next work
+
+- Proposal plan over current-92 has **5 guards + 41 isolated PASS**, new pending fictional proposal/setup audit only in copy and full rollback. Hosted proposal or native submission were not executed.
+- Seven business roles have **4 guards + 48 isolated PASS**. Stage adds only three new membership episodes, new Pending registration attempt 2 and one setup audit; old rejected/approved requests are not reopened or overwritten. Copy first confirms deny for all banned accounts; only COPIED Auth bans temporarily removed for simulated SQL scope check (three allowed/four denied), then original copied ban values restored. Exact retirement and rollback return all 92 original rows. No real Auth API or application HTTPS evidence. First duplicate-local-name syntax FAIL and initial 39/1 banned-model FAIL remain private history; that is not app defect nor is real ban bypassed.
+- New user-operated check-current-browser-role-batch.ps1 has **13 guard PASS**, syntax/offline PREPARED and Docker READY. First creates NEW full current-92 backup/eight byte restore. Once asks for DATABASE password, backend key and NEW fictional-only password (16–64 bytes, different from DB/key) in hidden prompts. Backend verifies exactly seven known confirmed fictional ID/email/namespace combinations before any change; never owner or new user.
+- Only when fresh backup and live whole-state guard pass, business rights are temporarily prepared and same privately chosen test password/unban set on known fictional users. Terminal guides user through seven Chrome logins and same immutable securedesk-role-private-get.js. Only sanitized SECUREDESK_ROLE_HTTP_RESULT for expected role/13 requests/8 original responses/four parent denials may go in result. Data with additional credentials field, different actor, old time or wrong checks/counts is rejected without saving raw input.
+- At end, timeout/error/Ctrl+C attempts ALL exactly known-seven Auth bans and exact SQL rights/token retirement, even if one provider/DB cleanup step fails. Adapter failure/unknown-owner scenario is mock-tested; that is not actual live error recovery proof. Bridge client that expired may be removed only after owned validation and replaced with new owned client. Whole catalogue/protected tables, original members/requests/audits and owner Auth/identity/profile hashes, zero sessions/refresh and all eight new Storage read bytes must be confirmed. New history remains, not deleted: expected current-97 state after successful batch. Cleanup uncertainty is FAIL and requires review; no automatic re-activation. Do not force-close terminal.
+
+Private preparation proof: current-browser-role-package-preparation-review-2026-10-13.json. **Real role package was not executed**; fake password/keys/COOKIE values agent did not read. Browser result provenance will be user-reported actual GET, not agent-automated UI or native POST wire capture. Server-content/upload replay/proposal role/final state/Pending-reopen/inactive-company/native transport/UI/final acceptance and daily caller remain separate.
+
+App/deployment/protection/schedule/approved spec and originals were not changed. Documents and all private helpers/archives remain local; no Markdown push. [Remaining work](PHASE7_REMAINING_WORK.md), [private steps](PHASE7_NEXT_PRIVATE_STEPS.md), [matrix](HOSTED_RUNTIME_SCENARIOS.md).
+
+## Input stop review and message fix
+
+User attempt at 18:42:31 UTC ended FAIL in input phase, before any hosted call, new copy or role activation. Exact incorrect input cannot be determined from earlier aggregate status; private values were not reviewed. Earlier FAIL and original preparation proof remain preserved. Retry is allowed after this review because nothing was activated; mandatory new full copy and live baseline guard still precede activation.
+
+Revised input-r2 message separates only fixed safe reasons: DB input, backend key format, missing/short/long/invalid or reused trial password and interactive terminal. Does not record values or lengths. Recommendation is new trial password of 20–32 plain ASCII characters; valid requirement remains 16–64 bytes and different input from DB/key. **14 local tests PASS**, including three real synthetic child processes that stop before hosted access, with syntax/PREPARED and local Docker READY. This is not real browser role PASS. Private review: browser-role-input-failure-review-2026-10-13T21-17Z.json.
+
+
+## Completed trial of seven ticket GET roles — 13 October
+
+[Real role result](PHASE7_BROWSER_ROLE_COMPLETION.md) has 678 PASS / 0 FAIL and 91 requests: three allowed roles get all eight identical files, four denied roles have no byte access, and each of seven has four parent/ID denials. Fresh account and private download header controls confirmed. Mandatory retirement: banned seven, zero rights and all sessions/refresh; original owner/history/eight bytes and catalogue preserved. Current postcheck is 97 rows with exactly five new retained synthetic history rows. Pre-role full 92-row copy and final reference remain separate; new full post-role 97-row copy was not executed. Old role/audit command is not repeated. Proposal/upload/native transport/UI/business exceptions/daily/final acceptance remain open. No app/deployment/spec/security/schedule change, real credentials read or Markdown GitHub write.

@@ -1,0 +1,9 @@
+# Proposal native content — package complete
+
+18 October 2026. User final PASS and independent private review confirm **24 browser PASS / 0 FAIL**. Seven explicit fetch calls cover four GET and three native multipart POST. Harmless TXT with PNG name/type and HTML rejected via tracked application-invalid redirect; observed final status is 200, raw 303 not observed. TXT of 10 MiB+1 byte returns 413, proving payload limit, without additional claim of deep application validation or wire Origin header.
+
+Actual browser check at 12:26:30 Europe/Budapest, and final read-only SQL at 12:27:31. Native owner logout confirmed. All 163 original rows, 13 file metadata/objects, and all 10.488.781 bytes/SHA-256 preserved; 25 non-Auth digests/catalog and stable Auth same. Allowed differences are only owner login timestamp fields. All test rights retired, sessions/refresh zero. Original proposal still pending/revision 7 with three ready attachments.
+
+Four relevant temporary containers independently absent. Final manifest has 369 signatures, 364 prior unchanged. Private sources are proposal-native-content-current-2026-10-18T10-25-19-931Z.json, proposal-native-content-completion-review-2026-10-18.json, and reviewed-current-proposal-native-content-retired-reference-2026-10-18.json. No new business rows/files, activation, or new full copy. Existing full copy keeps original deadline 18 October 17:48:35 Europe/Budapest; local completion does not extend it.
+
+This package is not repeated. [Preparation](PHASE7_PROPOSAL_NATIVE_CONTENT_PREPARATION.md) is historical procedure. Remaining P06 Origin, P03 negative roles, P08 final-proposal download, practical UI, genuine Vercel daily, and final acceptance remain separate per [matrix](PHASE7_CURRENT_SCENARIO_COVERAGE.md). Gate 7 stays open; application/deployment/spec/schedule not modified.
